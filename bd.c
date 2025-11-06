@@ -46,7 +46,7 @@ Times *criar_bdT(const int qtd_times, char* arq)
     
     //SÓ PARA TESTAR SE AS INFORMAÇÕES ESTÃO PRESENTES NO BANCO
     printf("%d", ptr_time[8].ID);
-    printf("%s", ptr_time[8].nome);
+    printf("%s", ptr_time[4].nome);
 
     fclose(csv);
     return ptr_time;
@@ -87,4 +87,71 @@ Partidas *criar_bdP(const int qtd_partidas, char* arq)
     fclose(csv);
     return ptr_partida;
 }
+
+void calcula_estatistica(const int qtd_times, const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
+{
+    //variáveis acumuladoras
+    int win = 0;
+    int defeat = 0;
+    int draw = 0;
+    int w_gols = 0;
+    int l_gols = 0;
+    //começa a contar as vitórias, derrotas e empates
+    for (int i = 0; i < qtd_times-1; i++)
+    {
+        for (int j = 0; j < qtd_partidas-1; j++)
+        {
+            if(bd_times[i].ID == bd_partidas[j].time1ID)
+            {
+                if(bd_partidas[j].gols1 > bd_partidas[j].gols2)
+                {
+                    win++;
+                } 
+                else if (bd_partidas[j].gols1 == bd_partidas[j].gols2)
+                {
+                    draw++;
+                }
+                else
+                {
+                    defeat++;
+                }
+                w_gols += bd_partidas[j].gols1;
+                l_gols += bd_partidas[j].gols2;
+                
+            }
+            if(bd_times[i].ID == bd_partidas[j].time2ID)
+            {
+                if(bd_partidas[j].gols1 < bd_partidas[j].gols2)
+                {
+                    win++;
+                } 
+                else if (bd_partidas[j].gols1 == bd_partidas[j].gols2)
+                {
+                    draw++;
+                }
+                else
+                {
+                    defeat++;
+                }
+                w_gols += bd_partidas[j].gols2;
+                l_gols += bd_partidas[j].gols1;
+            }
+        }
+        //insere estatisticas no struct status
+        bd_times[i].status.wins = win;
+        bd_times[i].status.lose = defeat;
+        bd_times[i].status.draw = draw;
+        bd_times[i].status.w_score = w_gols;
+        bd_times[i].status.l_score = l_gols;
+        bd_times[i].status.saldo = w_gols - l_gols;
+        bd_times[i].status.pts_ganho = 3*win + draw;
+        //reinicia as variáveis para calcular pro próximo time
+        win = 0;
+        draw = 0;
+        defeat = 0;
+        w_gols = 0;
+        l_gols = 0;
+    }      
+}
+
 
