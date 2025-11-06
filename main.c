@@ -17,9 +17,13 @@ int main()
     Times *bd_times = criar_bdT(linhas_times, arq_times);
     Partidas *bd_partidas = criar_bdP(linhas_partidas, arq_partidas);
     
-    //Exibi o menu
-    exibir_menu();
-
+    //Calcula e armazena dados do TAD times que é contido no BDtimes
+    calcula_estatistica(linhas_times, linhas_partidas, bd_times, bd_partidas);
+    
+    //Mostra a tela no terminal
+    exibir_menu(linhas_times, linhas_partidas, bd_times, bd_partidas);
+    
     return 0;
 }
+
 
