@@ -1,7 +1,7 @@
 #ifndef BD_H
 #define BD_H
 
-// registro struct de partidas
+//BD_partida
 typedef struct{
     int ID;
     int time1ID;
@@ -10,19 +10,35 @@ typedef struct{
     int gols2;
 }Partidas;
 
-// registro struct de times
+//TAD_time
+typedef struct{
+    int ID;
+    int wins;
+    int draw;
+    int lose;
+    int w_score;
+    int l_score;
+    int saldo;
+    int pts_ganho;
+}Status;
+
+//BD_time
 typedef struct{
     int ID;
     char nome[400];
-  //status; -> parao TAD TIMES que calcula as estatísticas
+    Status status;
 }Times;
 
 int conta_linhas();
 
-// Funções que criam espaço para o banco de dados
+//Funções que criam espaço para o banco de dados
 Times *criar_bdT();
 Partidas *criar_bdP();
 
+//Insere os dados no banco
 void *inserir_dados();
+
+//Calcula e insere dado no banco de dados
+void calcula_estatistica();
 
 #endif
