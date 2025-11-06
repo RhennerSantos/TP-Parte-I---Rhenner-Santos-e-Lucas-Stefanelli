@@ -26,7 +26,11 @@ Times *criar_bdT(const int qtd_times, char* arq)
 {
     //Aloca memória estaticamente para o banco de dados
     Times t[qtd_times -1];
-    Times *ptr_time = t;
+    //aloca dinamicamente memória pro ponteiro
+    Times *ptr_time = malloc(qtd_times * sizeof(Times));
+    for (int i = 0; i < qtd_times; i++){
+        ptr_time[i] = t[i]; 
+    }
     
     //abre arquivo para começar a preencher o banco de dados
     FILE *csv = fopen(arq, "r");
@@ -52,7 +56,11 @@ Partidas *criar_bdP(const int qtd_partidas, char* arq)
 {
     //Aloca memória estaticamente para o banco de dados
     Partidas p[qtd_partidas-1];
-    Partidas *ptr_partida = p;
+    //Aloca memória dinamicamente pro ponteiro
+    Partidas *ptr_partida = malloc(qtd_partidas * sizeof(Partidas));
+    for (int i = 0; i < qtd_partidas; i++){
+        ptr_partida[i] = p[i]; 
+    }
     
     //abre arquivo para começar a preencher o banco de dados
     FILE *csv = fopen(arq, "r");
@@ -79,3 +87,4 @@ Partidas *criar_bdP(const int qtd_partidas, char* arq)
     fclose(csv);
     return ptr_partida;
 }
+
