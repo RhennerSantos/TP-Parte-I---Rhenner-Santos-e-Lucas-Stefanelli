@@ -14,6 +14,7 @@ typedef struct{
 typedef struct{
     int ID;
     char nome[400];
+  //status; -> parao TAD TIMES que calcula as estatísticas
 }Times;
 
 int conta_linhas();
