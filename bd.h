@@ -14,7 +14,6 @@ typedef struct{
 typedef struct{
     int ID;
     char nome[400];
-    //status; - > inserir quando for fazer o TAD times
 }Times;
 
 int conta_linhas();
