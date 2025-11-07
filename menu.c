@@ -101,26 +101,28 @@ void exibir_menu(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
     
         switch(escolha){
             case '1': 
-                if(qtd_partidas != 0)
+                if(qtd_partidas != 1)
                 {
                     consultar_time(bd_times);
                     break;    
                 }
                 else
                 {
+                    limpa_tela();
                     printf("Infelizmente, os times não constam nenhum score no sistema\n");
                 }
             case '2': 
                 //consultar_partidas(); 
                 break;
             case '6':
-                if(qtd_partidas != 0)
+                if(qtd_partidas != 1)
                 {
                     mostrar_classificação(bd_times, bd_partidas);
                     break;    
                 }
                 else
                 {
+                    limpa_tela();
                     printf("Infelizmente, os times não constam nenhum score no sistema\n");
                 }
                 break;
@@ -135,4 +137,5 @@ void exibir_menu(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
         }
     }
 }
+
 
