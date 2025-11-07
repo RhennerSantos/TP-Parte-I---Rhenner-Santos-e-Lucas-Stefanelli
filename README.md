@@ -79,7 +79,7 @@ typedef struct{
 ### 3 Funções do main()
 ```
 conta_linhas(arq_partidas) :  Retorna a quantidade de linhas do arquivo partidas, útil para iterar o
-                              BD_Partidas de partidas.
+                              BD_Partidas.
 criar_bdT() :                 Cria espaço e carrega arquivos CSV dentro do banco de dados de times.
 criar_bdP() :                 Faz o mesmo, só que para o banco de dados de partidas.
 calcula_estatistica() :       Calcula as estatitiscas dos times e coloca no TAD_Time.
