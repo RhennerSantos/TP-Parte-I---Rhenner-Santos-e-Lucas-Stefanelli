@@ -2,57 +2,137 @@
 #include "bd.h" 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 
-void limpa_tela()
-{
-    system("clear");
+void limpa_tela(){
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 }
 
+void lowercase(char *outro_time, char *nome_time, int tamanho_nome)
+{
+    for (int i = 0; i < tamanho_nome; i++)
+    {
+        outro_time[i] = tolower(outro_time[i]);
+        nome_time[i] = tolower(nome_time[i]);
+    }
+}
 
+void consultar_time(Times *bd_times){
+    char *nome_time = malloc(sizeof(char)*40);
+    char *outro_time = malloc(sizeof(char)*40);
+    bool cabecalho = false;
 
-void mostrar_classificação(const int qtd_times, Times *bd_times, Partidas *bd_partidas)
+    limpa_tela();
+
+    printf("\nDigite o nome ou prefixo do time:\n");
+    scanf("%s", nome_time);
+
+    int tamanho_nome = strlen(nome_time);
+
+    for (int i = 0; i < 10; i++){
+        strncpy(outro_time, bd_times[i].nome, tamanho_nome);
+        //torna o search case insensitive
+        lowercase(outro_time, nome_time, tamanho_nome);
+        if (strncmp(outro_time, nome_time, tamanho_nome) == 0){
+            if (!cabecalho){
+                printf("%-4s %-25s %4s %4s %4s %4s %4s %4s %4s\n", "ID", "Time", "V", "E", "D", "GM", "GS", "S", "PG");
+                cabecalho = true;
+            }
+
+            printf("%-4d %-25s %4d %4d %4d %4d %4d %4d %4d\n",
+                bd_times[i].ID,
+                bd_times[i].nome,
+                bd_times[i].status.wins,
+                bd_times[i].status.draw,
+                bd_times[i].status.lose,
+                bd_times[i].status.w_score,
+                bd_times[i].status.l_score,
+                bd_times[i].status.saldo,
+                bd_times[i].status.pts_ganho);
+            
+        }
+    }
+
+    if (!cabecalho){
+        printf("Time não encontrado.");
+    }
+
+    printf("\n\n");
+}
+
+void mostrar_classificação(Times *bd_times, Partidas *bd_partidas)
 {
     limpa_tela();
-    //TEM QUE ALINHAR ISSO AINDA
-    printf("ID\tTime\t\t\tV\tE\tD\tGM\tGS\tS\tPG\n");
-    for (int i = 0; i < qtd_times-1; i++)
-    {
-        printf("%d", bd_times[i].ID);
-        printf("\t%s", bd_times[i].nome);
-        printf("\t\t\t%d", bd_times[i].status.wins);
-        printf("\t%d", bd_times[i].status.lose);
-        printf("\t%d", bd_times[i].status.draw);
-        printf("\t%d", bd_times[i].status.w_score);
-        printf("\t%d", bd_times[i].status.l_score);
-        printf("\t%d", bd_times[i].status.saldo);
-        printf("\t%d\n", bd_times[i].status.pts_ganho);
+    
+    printf("%-4s %-25s %4s %4s %4s %4s %4s %4s %4s\n", "ID", "Time", "V", "E", "D", "GM", "GS", "S", "PG");
+    for (int i = 0; i < 10; i++)
+    {   
+        printf("%-4d %-25s %4d %4d %4d %4d %4d %4d %4d\n",
+            bd_times[i].ID,
+            bd_times[i].nome,
+            bd_times[i].status.wins,
+            bd_times[i].status.draw,
+            bd_times[i].status.lose,
+            bd_times[i].status.w_score,
+            bd_times[i].status.l_score,
+            bd_times[i].status.saldo,
+            bd_times[i].status.pts_ganho);
     }
     printf("\n\n\n");
 }
 
-void exibir_menu(const int qtd_times, const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
+void exibir_menu(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
 {
     char escolha;
-    while(escolha != 'Q' && escolha != 'q')
-    {
-    printf("Bem-vindo ao sistema de gerenciamento de partidas!\n");
-    printf("Digie um número para prosseguir: \n");
-    printf("1 - Consultar time\n"
-           "2 - Consultar partidas\n"
-           "6 - Imprimir tabela de classificação\n"
-           "Q - Sair\n");
-    scanf("%c", &escolha);
+    while(escolha != 'Q' && escolha != 'q'){
+        printf("Bem-vindo ao sistema de gerenciamento de partidas!\n");
+        printf("Digite um numero para prosseguir: \n");
+        printf("1 - Consultar time\n"
+            "2 - Consultar partidas\n"
+            "6 - Imprimir tabela de classificacao\n"
+            "Q - Sair\n");
+        scanf(" %c", &escolha);
     
-    switch(escolha)
-    {
-        //verificar depois se a lista está vazia pela qtd_times e qtd_partidas
-        //se estiver, mostre um aviso em vez de executar a função
-        case '1': //consultar_time();
-        case '2': //consultar_partidas();
-        case '6': mostrar_classificação(qtd_times, bd_times, bd_partidas); break;
-        case 'Q': printf("Você escolheu sair do sistema"); break;
-        case 'q': printf("Você escolheu sair do sistema"); break;
-        default: printf("Não existe essa opção\n");
-    }
+        switch(escolha){
+            case '1': 
+                if(qtd_partidas != 0)
+                {
+                    consultar_time(bd_times);
+                    break;    
+                }
+                else
+                {
+                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
+                }
+            case '2': 
+                //consultar_partidas(); 
+                break;
+            case '6':
+                if(qtd_partidas != 0)
+                {
+                    mostrar_classificação(bd_times, bd_partidas);
+                    break;    
+                }
+                else
+                {
+                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
+                }
+                break;
+            case 'Q':
+                printf("Você escolheu sair do sistema\n");
+                break;
+            case 'q':
+                printf("Você escolheu sair do sistema\n");
+                break;
+            default:
+                printf("Não existe essa opção\n");
+        }
     }
 }
+
