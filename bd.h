@@ -29,16 +29,16 @@ typedef struct{
     Status status;
 }Times;
 
-int conta_linhas();
+int conta_linhas(char *p);
 
 //Funções que criam espaço para o banco de dados
-Times *criar_bdT();
-Partidas *criar_bdP();
+Times *criar_bdT(char *p);
+Partidas *criar_bdP(const int x, char *p);
 
 //Insere os dados no banco
 void *inserir_dados();
 
 //Calcula e insere dado no banco de dados
-void calcula_estatistica();
+void calcula_estatistica(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas);
 
 #endif
