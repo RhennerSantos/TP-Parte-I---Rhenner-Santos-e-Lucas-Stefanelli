@@ -34,21 +34,12 @@ Q. Termina a execução do sistema.
  |Arquivos        | Sobre                                             |        
  |----------      |-------------------------------------------------  |
  |Makefile        |executa e compila os arquivos automaticamente      |
- |Makefile        |arquivo principal do programa                      |
- |main.c          |possui o TAD BDTimes, TAD BDPartidas e o TAD Times |
+ |main.c          |arquivo principal do programa                      |
  |bd.c + bd.h     |possui o TAD BDTimes, TAD BDPartidas e o TAD Times |
  |menu.c + menu.h |possui o TAD Partidas e outras funções do menu.    |
  |partidas.csv    |conjunto de dados das partidas                     |
  |times.csv       |conjunto de dados do grupo de times                |
  |README.md       |Documentação do sistema                            |
- 
- Makefile - executa e compila os arquivos automaticamente.
- main.c - arquivo principal do programa.
- bd.c + bd.h - possui o TAD BDTimes, TAD BDPartidas e o TAD Times.
- menu.c + menu.h - possui o TAD Partidas e outras funções do menu.
- partidas_completo.csv - conjunto de dados das partidas.
- times.csv - conjunto de dados do grupo de times.
- README.md
  
 ### 2. TADs
 
