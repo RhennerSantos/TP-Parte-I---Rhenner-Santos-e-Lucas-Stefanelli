@@ -9,8 +9,9 @@ Este é um sistema produzido para a disciplina de Estruturas de Dados, ministrad
 - Inserir o diretório correto para os arquivos CSV.
 
 ### 2. Execução
-
-```Digite "make" no console```
+```
+Digite "make" no console
+```
   
 ### 3. Interação com a interface
 `
