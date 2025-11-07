@@ -76,7 +76,7 @@ typedef struct{
 
 Há 3 structs, cada um representado um TAD diferente. É interessante observar que o struct TAD_Time fica dentro do BD_Times, em vez de ser um terceiro struct separado. Essa decisão foi feita para facilitar o acesso às informações do banco de dados.
  
-## 3 Funções do main()
+### 3 Funções do main()
 
 ```
 conta_linhas(arq_partidas) :  Retorna a quantidade de linhas do arquivo partidas.
@@ -86,7 +86,7 @@ calcula_estatistica() :       Calcula as estatítiscas dos times e coloca no TAD
 exibir_menu() :               Exibi o menu e entrega as funções para a consulta dos dados.
 ```
 
-## 4 Decisões de implementação
+##  Decisões de implementação
 
 - Conta_linhas(): Função para contar as quantidade variável de linhas do partidas.csv. Útil para quando for necessário iterar o BD_Partidas.
 - Criação de BD_times e BD_Partidas: Para ficar mais fácil de acompanhar o código, o banco de dados foi dividido em dois structs diferentes separados.  
