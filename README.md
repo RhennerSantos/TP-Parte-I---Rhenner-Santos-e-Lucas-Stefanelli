@@ -77,6 +77,7 @@ typedef struct{
 Há 3 structs, cada um representado um TAD diferente. É interessante observar que o struct TAD_Time fica dentro do BD_Times, em vez de ser um terceiro struct separado. Essa decisão foi feita para facilitar o acesso às informações do banco de dados.
  
 ### 3 Funções do main()
+
 ```
 conta_linhas(arq_partidas) :  Retorna a quantidade de linhas do arquivo partidas, útil para iterar o
                               BD_Partidas.
