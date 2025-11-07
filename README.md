@@ -41,7 +41,7 @@ Q - Sair.
  |times.csv       |conjunto de dados do grupo de times                |
  |README.md       |documentação do sistema                            |
  
-### 2. TADs
+### 2. Banco de dados
 ```C
 //TAD BD_partida
 typedef struct{
