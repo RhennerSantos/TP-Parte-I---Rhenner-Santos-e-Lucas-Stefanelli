@@ -11,7 +11,7 @@ SRCS = main.c menu.c bd.c
 OBJS = $(SRCS:.c=.o)
 
 # Nome do executável
-TARGET = sistema_times
+TARGET = sistema_campeonato
 
 # Desassocia comandos a nomes de arquivos
 .PHONY: all compile run clean
