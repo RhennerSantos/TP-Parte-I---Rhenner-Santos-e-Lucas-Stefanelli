@@ -14,12 +14,12 @@ Este é um sistema produzido para a disciplina de Estruturas de Dados, ministrad
   
 ### 3. Interação com a interface
 
-`Bem-vindo ao sistema de gerenciamento de partidas!`
-`Digite um numero para prosseguir:`
-`1 - Consultar time`
-`2 - Consultar partidas`
-`6 - Imprimir tabela de classificação`
-`Q - Sair`
+Bem-vindo ao sistema de gerenciamento de partidas!
+Digite um numero para prosseguir:
+1 - Consultar time
+2 - Consultar partidas
+6 - Imprimir tabela de classificação
+Q - Sair
 
 1. Exibe os nomes dos times que forem pesquisados 
 2. Exibe as partidas do time que for pesquisado 
