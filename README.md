@@ -80,7 +80,7 @@ Há 3 structs, cada um representado um TAD diferente. É interessante observar q
 ```
 conta_linhas(arq_partidas) :  Retorna a quantidade de linhas do arquivo partidas, útil para iterar o
                               BD_Partidas.
-criar_bdT() :                 Cria espaço e carrega arquivos CSV dentro do banco de dados de times.
+criar_bdT() :                 Cria espaço estaticamente e carrega arquivos CSV dentro do banco de dados de times.
 criar_bdP() :                 Faz o mesmo, só que para o banco de dados de partidas.
 calcula_estatistica() :       Calcula as estatítiscas dos times e coloca no TAD_Time.
 exibir_menu() :               Exibi o menu e entrega as funções para a consulta dos dados.
