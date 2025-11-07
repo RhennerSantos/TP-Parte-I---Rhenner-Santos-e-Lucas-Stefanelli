@@ -19,21 +19,21 @@ TARGET = sistema_times
 # Alvo padrão 
 all: compile run
 
-# Explicit compile target (produces the target program)
+# Alvo de compilação explícito
 compile: $(TARGET)
 
-# Run the executable
+# Roda o executável
 run: $(TARGET)
 	./$(TARGET)
 
-# Clean up
+# Remove arquivos criados temporariamente
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-# Compile source files into object files
+# Compila arquivos de origem em arquivos objeto 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Link object files to create the executable
+# liga arquivos objeto para criar o executável
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
