@@ -24,7 +24,7 @@ Q - Sair.
 ```
 
 1. Exibe os nomes dos times que forem pesquisados. 
-2. Exibe as partidas do time que for pesquisado. 
+2. Mostra as partidas do jogadas dos times que foram digitados. 
 6. Imprime uma tabela com a pontução de todos os times.
 
 Q. Termina a execução do sistema.
