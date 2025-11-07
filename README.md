@@ -76,16 +76,23 @@ typedef struct{
 
 Há 3 structs, cada um representado um TAD diferente. É interessante observar que o struct TAD_Time fica dentro do BD_Times, em vez de ser um terceiro struct separado. Essa decisão foi feita para facilitar o acesso às informações do banco de dados.
  
-### 3 Funções do main()
+## 3 Funções do main()
 
 ```
-conta_linhas(arq_partidas) :  Retorna a quantidade de linhas do arquivo partidas, útil para iterar o
-                              BD_Partidas.
+conta_linhas(arq_partidas) :  Retorna a quantidade de linhas do arquivo partidas.
 criar_bdT() :                 Cria espaço estaticamente e carrega arquivos CSV dentro do banco de dados de times.
 criar_bdP() :                 Faz o mesmo, só que para o banco de dados de partidas.
 calcula_estatistica() :       Calcula as estatítiscas dos times e coloca no TAD_Time.
 exibir_menu() :               Exibi o menu e entrega as funções para a consulta dos dados.
 ```
+
+## 4 Decisões de implementação
+
+- Conta_linhas(): Função para contar as quantidade variável de linhas do partidas.csv. Útil para quando for necessário iterar o BD_Partidas.
+- Criação de BD_times e BD_Partidas: Para ficar mais fácil de acompanhar o código, o banco de dados foi dividido em dois structs diferentes separados.  
+- Calcula_estatistica(): Foi decidido que seria melhor que as estatísticas dos times fossem calculadas de uma só vez no main.c, antes do menu ser iniciado. 
+- Botar_nome_quando_sair(): Essa é uma função que torna possível fazer uma pesquisa case insensitive e que consegue encontrar o time apenas pelo prefixo dele. 
+
 
 
 
