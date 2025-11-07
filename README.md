@@ -52,7 +52,6 @@ typedef struct{
     int gols2;
 }Partidas;
 ```
-Esse é o TAD BD_Partidas
 ```C
 //TAD_time
 typedef struct{
