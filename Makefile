@@ -34,6 +34,6 @@ clean:
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# liga arquivos objeto para criar o executável
+# Liga arquivos objeto para criar o executável
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
