@@ -39,7 +39,7 @@ Q - Sair.
  |menu.c + menu.h |possui o TAD Partidas e outras funções do menu.    |
  |partidas.csv    |conjunto de dados das partidas                     |
  |times.csv       |conjunto de dados do grupo de times                |
- |README.md       |Documentação do sistema                            |
+ |README.md       |documentação do sistema                            |
  
 ### 2. TADs
 ```C
