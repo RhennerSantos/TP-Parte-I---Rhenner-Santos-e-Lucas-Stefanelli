@@ -22,13 +22,13 @@ int conta_linhas(char *arq)
     return count;
 }
 
-Times *criar_bdT(const int qtd_times, char* arq)
+Times *criar_bdT(char* arq)
 {
     //Aloca memória estaticamente para o banco de dados
-    Times t[qtd_times -1];
+    Times t[10];
     //aloca dinamicamente memória pro ponteiro
-    Times *ptr_time = malloc(qtd_times * sizeof(Times));
-    for (int i = 0; i < qtd_times; i++){
+    Times *ptr_time = malloc(10 * sizeof(Times));
+    for (int i = 0; i < 10; i++){
         ptr_time[i] = t[i]; 
     }
     
@@ -40,13 +40,9 @@ Times *criar_bdT(const int qtd_times, char* arq)
     fgets(linha, sizeof(linha), csv);
  
     //preenche o banco de dados
-    for (int i = 0; i < qtd_times; i++){
+    for (int i = 0; i < 10; i++){
     fscanf(csv, "%d, %s", &ptr_time[i].ID, ptr_time[i].nome);
     }
-    
-    //SÓ PARA TESTAR SE AS INFORMAÇÕES ESTÃO PRESENTES NO BANCO
-    printf("%d", ptr_time[8].ID);
-    printf("%s", ptr_time[4].nome);
 
     fclose(csv);
     return ptr_time;
@@ -75,20 +71,11 @@ Partidas *criar_bdP(const int qtd_partidas, char* arq)
     &ptr_partida[i].gols1, &ptr_partida[i].gols2); 
     }
 
-    //SÓ PARA TESTAR SE AS INFORMAÇÕES ESTÃO PRESENTES NO BANCO
-    printf("\n \n");
-    printf("%d", ptr_partida[0].ID);
-    printf("%d", ptr_partida[0].time1ID);
-    printf("%d", ptr_partida[0].time2ID);
-    printf("%d", ptr_partida[0].gols1);
-    printf("%d", ptr_partida[0].gols2);
-    printf("\n \n");
-
     fclose(csv);
     return ptr_partida;
 }
 
-void calcula_estatistica(const int qtd_times, const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
+void calcula_estatistica(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
 {
     //variáveis acumuladoras
     int win = 0;
@@ -97,7 +84,7 @@ void calcula_estatistica(const int qtd_times, const int qtd_partidas, Times *bd_
     int w_gols = 0;
     int l_gols = 0;
     //começa a contar as vitórias, derrotas e empates
-    for (int i = 0; i < qtd_times-1; i++)
+    for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < qtd_partidas-1; j++)
         {
@@ -153,5 +140,6 @@ void calcula_estatistica(const int qtd_times, const int qtd_partidas, Times *bd_
         l_gols = 0;
     }      
 }
+
 
 
