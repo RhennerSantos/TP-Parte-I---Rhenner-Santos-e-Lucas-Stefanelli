@@ -32,9 +32,6 @@ Q. Termina a execução do sistema.
  |teste        |
  |------------ |
  
- 
- 
- 
  Makefile - executa e compila os arquivos automaticamente.
  main.c - arquivo principal do programa.
  bd.c + bd.h - possui o TAD BDTimes, TAD BDPartidas e o TAD Times.
@@ -44,7 +41,47 @@ Q. Termina a execução do sistema.
  README.md
  
 ### 2. TADs
+
+//TAD BD_partida
+typedef struct{
+    int ID;
+    int time1ID;
+    int time2ID;
+    int gols1;
+    int gols2;
+}Partidas;
+
+Esse é o TAD BD_Partidas
+
+//TAD_time
+typedef struct{
+    int ID;
+    int wins;
+    int draw;
+    int lose;
+    int w_score;
+    int l_score;
+    int saldo;
+    int pts_ganho;
+}Status;
+
+//TAD BD_Time
+typedef struct{
+    int ID;
+    char nome[400];
+    Status status;
+}Times;
+
+É interessante observar que o struct TAD_Times fica dentro do BD_Times, em vez de ser um terceiro struct separado. Essa decisão foi feita para facilitar o acesso as informações do banco de dados.
  
+### 3 Funções do main()
+
+conta_linhas(arq_partidas) - retorna a quantidade de linhas do arquivo partidas, útil para iterar o csv de partidas.
+criar_bdT() - cria espaço e carrega arquivos csv dentro do banco de dados de times.
+criar_bdP() - faz o mesmo, só que para o banco de dados de partidas.
+calcula_estatistica() - calcula as estatitiscas dos times e coloca no TAD_Time.
+exibir_menu() - Exibi o menu e possui as funções de consulta dos dados.
+
 
 
 
