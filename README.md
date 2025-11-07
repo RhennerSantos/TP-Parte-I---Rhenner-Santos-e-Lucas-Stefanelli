@@ -14,14 +14,15 @@ Digite "make" no console
 ```
   
 ### 3. Interação com a interface
-`
+```
 Bem-vindo ao sistema de gerenciamento de partidas!
 Digite um numero para prosseguir:
 1 - Consultar time.
 2 - Consultar partidas.
 6 - Imprimir tabela de classificação.
 Q - Sair.
-`
+```
+
 1. Exibe os nomes dos times que forem pesquisados 
 2. Exibe as partidas do time que for pesquisado 
 6. Imprime uma tabela com a pontução de todos os times
