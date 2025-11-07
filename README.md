@@ -23,9 +23,9 @@ Digite um numero para prosseguir:
 Q - Sair.
 ```
 
-1. Exibe os nomes dos times que forem pesquisados 
-2. Exibe as partidas do time que for pesquisado 
-6. Imprime uma tabela com a pontução de todos os times
+1. Exibe os nomes dos times que forem pesquisados. 
+2. Exibe as partidas do time que for pesquisado. 
+6. Imprime uma tabela com a pontução de todos os times.
 Q. Termina a execução do sistema.
  
 ## Estrutura do projeto
