@@ -74,7 +74,7 @@ typedef struct{
 }Times;
 ```
 
-É interessante observar que o struct TAD_Time fica dentro do BD_Times, em vez de ser um terceiro struct separado. Essa decisão foi feita para facilitar o acesso às informações do banco de dados.
+Há 3 structs, cada um representado um TAD diferente. É interessante observar que o struct TAD_Time fica dentro do BD_Times, em vez de ser um terceiro struct separado. Essa decisão foi feita para facilitar o acesso às informações do banco de dados.
  
 ### 3 Funções do main()
 ```
