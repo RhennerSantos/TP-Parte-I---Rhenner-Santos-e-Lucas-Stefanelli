@@ -1,22 +1,22 @@
-# Compiler
+# Compilador
 CC = gcc
 
-# Compiler flags
+# Flags do compilador
 CFLAGS = -Wall
 
-# Source files
+# Arquivos de origem
 SRCS = main.c menu.c bd.c
 
-# Object files
+# Arquivo objeto
 OBJS = $(SRCS:.c=.o)
 
-# Executable name
-TARGET = test_stack
+# Nome do executável
+TARGET = sistema_times
 
-# Phony targets
+# Desassocia comandos a nomes de arquivos
 .PHONY: all compile run clean
 
-# Default target (compile and run)
+# Alvo padrão 
 all: compile run
 
 # Explicit compile target (produces the target program)
