@@ -42,7 +42,7 @@ Q. Termina a execução do sistema.
  |README.md       |Documentação do sistema                            |
  
 ### 2. TADs
-
+```C
 //TAD BD_partida
 typedef struct{
     int ID;
@@ -51,9 +51,9 @@ typedef struct{
     int gols1;
     int gols2;
 }Partidas;
-
+```
 Esse é o TAD BD_Partidas
-
+```C
 //TAD_time
 typedef struct{
     int ID;
@@ -65,13 +65,15 @@ typedef struct{
     int saldo;
     int pts_ganho;
 }Status;
-
+```
+```C
 //TAD BD_Time
 typedef struct{
     int ID;
     char nome[400];
     Status status;
 }Times;
+```
 
 É interessante observar que o struct TAD_Times fica dentro do BD_Times, em vez de ser um terceiro struct separado. Essa decisão foi feita para facilitar o acesso as informações do banco de dados.
  
