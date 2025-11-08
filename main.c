@@ -6,8 +6,8 @@
 int main()
 {
     //Obtém os arquivos csv
-    char *arq_times = "times.txt";
-    char *arq_partidas = "partidas_completo.txt";
+    char *arq_times = "times.csv";
+    char *arq_partidas = "partidas.csv";
 
     //Retorna um número para inserir no vetor estático e para facilitar a iteração do vetor
     const int linhas_partidas = conta_linhas(arq_partidas);
@@ -27,6 +27,7 @@ int main()
     free(bd_partidas);
     return 0;
 }
+
 
 
 
