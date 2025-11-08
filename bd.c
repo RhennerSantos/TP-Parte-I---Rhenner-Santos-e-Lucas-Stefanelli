@@ -143,3 +143,4 @@ void calcula_estatistica(const int qtd_partidas, Times *bd_times, Partidas *bd_p
 
 
 
+
