@@ -1,12 +1,13 @@
 #include "bd.h" 
 #include "menu.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main()
 {
     //Obtém os arquivos csv
-    char *arq_times = "times.csv";
-    char *arq_partidas = "partidas.csv";
+    char *arq_times = "times.txt";
+    char *arq_partidas = "partidas_completo.txt";
 
     //Retorna um número para inserir no vetor estático e para facilitar a iteração do vetor
     const int linhas_partidas = conta_linhas(arq_partidas);
@@ -21,8 +22,12 @@ int main()
     //Mostra a tela no terminal
     exibir_menu(linhas_partidas, bd_times, bd_partidas);
     
+    //Libera os ponteiros do banco de dados
+    free(bd_times);
+    free(bd_partidas);
     return 0;
 }
+
 
 
 
