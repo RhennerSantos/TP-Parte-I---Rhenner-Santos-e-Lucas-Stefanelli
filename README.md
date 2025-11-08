@@ -91,7 +91,9 @@ exibir_menu() :               Exibi o menu e entrega as funções para a consult
 - Conta_linhas(): Função para contar as quantidade variável de linhas do partidas.csv. Útil para quando for necessário iterar o BD_Partidas.
 - Criação de BD_times e BD_Partidas: Para ficar mais fácil de acompanhar o código, o banco de dados foi dividido em dois structs diferentes separados.  
 - Calcula_estatistica(): Foi decidido que seria melhor que as estatísticas dos times fossem calculadas de uma só vez no main.c, antes do menu ser iniciado. 
-- Botar_nome_quando_sair(): Essa é uma função que torna possível fazer uma pesquisa case insensitive e que consegue encontrar o time apenas pelo prefixo dele. 
+- lowercase(): Essa é uma função que torna possível fazer uma pesquisa case insensitive e que consegue encontrar o time apenas pelo prefixo dele.
+- inArray(): Checa se os IDs escolhidos são os do time desejado; 
+- strncmp(): Faz o search tanto pelo nome completo, quanto pelo prefixo;
 
 
 
