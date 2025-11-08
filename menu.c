@@ -14,12 +14,96 @@ void limpa_tela(){
     #endif
 }
 
+bool inArray(int *arr, int alvo, int tamanho_arr){
+    for (int i = 0; i < tamanho_arr; i++){
+        if (arr[i] == alvo){
+            return true;
+        }
+    }
+    return false;
+}
+
 void lowercase(char *outro_time, char *nome_time, int tamanho_nome)
 {
     for (int i = 0; i < tamanho_nome; i++)
     {
         outro_time[i] = tolower(outro_time[i]);
         nome_time[i] = tolower(nome_time[i]);
+    }
+}
+
+void consultar_partidas(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas){
+    char escolha;
+    int i, j = 0, tamanho_nome;
+    char *nome_time = malloc(sizeof(char)*40);
+    char *outro_time = malloc(sizeof(char)*40);
+    int ids[10];
+
+    limpa_tela();
+
+    printf("Escolha o modo de consulta:\n\n1. Por time mandante\n2. Por time visitante\n3. Por time mandante ou visitante\n4. Retornar ao menu principal\n\n");
+    scanf(" %c", &escolha);
+
+    if (escolha != '4'){
+
+        printf("Digite o nome ou prefixo do time: ");
+        scanf("%s", nome_time);
+
+        tamanho_nome = strlen(nome_time);
+
+        for (int i = 0; i < 10; i++){
+
+            strncpy(outro_time, bd_times[i].nome, tamanho_nome);
+            //torna o search case insensitive
+            lowercase(outro_time, nome_time, tamanho_nome);
+
+            if (strncmp(outro_time, nome_time, tamanho_nome) == 0){
+                ids[j] = bd_times[i].ID;
+                j++;
+            }
+        }
+        if (j == 0){
+            printf("Time não encontrado.\n");
+        }else{
+        printf("%-5s %-18s %-25s\n",
+        "ID",
+        "Time 1",
+        "Time 2");
+            for (i = 0; i < qtd_partidas - 1; i++){
+                if (inArray(ids, bd_partidas[i].time1ID, j) && escolha == '1'){
+                    printf("%-5d %-12s %d %s %d %-15s\n",
+                        bd_partidas[i].ID,
+                        bd_times[bd_partidas[i].time1ID].nome,
+                        bd_partidas[i].gols1,
+                        "X",
+                        bd_partidas[i].gols2,
+                        bd_times[bd_partidas[i].time2ID].nome
+                    );
+                    }else if (inArray(ids, bd_partidas[i].time2ID, j) && escolha == '2'){
+                        printf("%-5d %-12s %d %s %d %-15s\n",
+                        bd_partidas[i].ID,
+                        bd_times[bd_partidas[i].time1ID].nome,
+                        bd_partidas[i].gols1,
+                        "X",
+                        bd_partidas[i].gols2,
+                        bd_times[bd_partidas[i].time2ID].nome
+                    );
+                    }else if ((inArray(ids, bd_partidas[i].time1ID, j) || inArray(ids, bd_partidas[i].time2ID, j)) && escolha == '3'){
+                        printf("%-5d %-12s %d %s %d %-15s\n", bd_partidas[i].ID,
+                            bd_times[bd_partidas[i].time1ID].nome,
+                            bd_partidas[i].gols1,
+                            "X",
+                            bd_partidas[i].gols2,
+                            bd_times[bd_partidas[i].time2ID].nome
+                        );
+                    }
+                    
+                }
+        
+    }
+        free(nome_time);
+        free(outro_time);
+        printf("\n");
     }
 }
 
@@ -62,7 +146,8 @@ void consultar_time(Times *bd_times){
     if (!cabecalho){
         printf("Time não encontrado.");
     }
-
+    free(nome_time);
+    free(outro_time);
     printf("\n\n");
 }
 
@@ -110,9 +195,20 @@ void exibir_menu(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
                 {
                     limpa_tela();
                     printf("Infelizmente, os times não constam nenhum score no sistema\n");
+                    break;
                 }
-            case '2': 
-                //consultar_partidas(); 
+            case '2':
+                if(qtd_partidas != 1)
+                {
+                    consultar_partidas(qtd_partidas, bd_times, bd_partidas);
+                    break;    
+                }
+                else
+                {
+                    limpa_tela();
+                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
+                    break;
+                }
                 break;
             case '6':
                 if(qtd_partidas != 1)
@@ -124,6 +220,7 @@ void exibir_menu(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
                 {
                     limpa_tela();
                     printf("Infelizmente, os times não constam nenhum score no sistema\n");
+                    break;
                 }
                 break;
             case 'Q':
@@ -137,5 +234,6 @@ void exibir_menu(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
         }
     }
 }
+
 
 
