@@ -93,7 +93,7 @@ exibir_menu() :               Exibi o menu e entrega as funções para a consult
 - Calcula_estatistica(): Foi decidido que seria melhor que as estatísticas dos times fossem calculadas de uma só vez no main.c, antes do menu ser iniciado. 
 - lowercase(): Essa é uma função que torna possível fazer uma pesquisa case insensitive.
 - inArray(): Checa se os IDs escolhidos são os do time desejado; 
-- strncmp(): Faz o search tanto pelo nome completo, quanto pelo prefixo;
+- strncmp(): Faz o search tanto pelo nome completo quanto pelo prefixo;
 
 
 
