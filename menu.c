@@ -32,11 +32,26 @@ void lowercase(char *outro_time, char *nome_time, int tamanho_nome)
     }
 }
 
-void consultar_partidas(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas){
+char** busca_time(int id1, int id2, BDTime *bd_times)
+{
+    char **nome = malloc(2 * sizeof(char*));
+    for (No_T *t = bd_times->first; t != NULL; t = t->next){
+        if (t->times.ID == id1){
+            nome[0] = t->times.nome;
+        }
+        if (t->times.ID == id2){
+            nome[1] = t->times.nome;
+        }
+    }
+    return nome;
+}
+
+void consultar_partidas(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partidas){
     char escolha;
     int i, j = 0, tamanho_nome;
     char *nome_time = malloc(sizeof(char)*40);
     char *outro_time = malloc(sizeof(char)*40);
+    char **nome = malloc(2 * sizeof(char*));
     int ids[10];
 
     limpa_tela();
@@ -51,14 +66,13 @@ void consultar_partidas(const int qtd_partidas, Times *bd_times, Partidas *bd_pa
 
         tamanho_nome = strlen(nome_time);
 
-        for (int i = 0; i < 10; i++){
+        for (No_T *t = bd_times->first; t != NULL; t = t->next){
 
-            strncpy(outro_time, bd_times[i].nome, tamanho_nome);
+            strncpy(outro_time, t->times.nome, tamanho_nome);
             //torna o search case insensitive
             lowercase(outro_time, nome_time, tamanho_nome);
-
             if (strncmp(outro_time, nome_time, tamanho_nome) == 0){
-                ids[j] = bd_times[i].ID;
+                ids[j] = t->times.ID;
                 j++;
             }
         }
@@ -69,32 +83,35 @@ void consultar_partidas(const int qtd_partidas, Times *bd_times, Partidas *bd_pa
         "ID",
         "Time 1",
         "Time 2");
-            for (i = 0; i < qtd_partidas - 1; i++){
-                if (inArray(ids, bd_partidas[i].time1ID, j) && escolha == '1'){
+            for (No_P *p = bd_partidas->first; p != NULL; p = p->next){
+                if (inArray(ids, p->partidas.time1ID, j) && escolha == '1'){
+                    nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
                     printf("%-5d %-12s %d %s %d %-15s\n",
-                        bd_partidas[i].ID,
-                        bd_times[bd_partidas[i].time1ID].nome,
-                        bd_partidas[i].gols1,
+                        p->partidas.ID,
+                        nome[0],
+                        p->partidas.gols1,
                         "X",
-                        bd_partidas[i].gols2,
-                        bd_times[bd_partidas[i].time2ID].nome
+                        p->partidas.gols2,
+                        nome[1]
                     );
-                    }else if (inArray(ids, bd_partidas[i].time2ID, j) && escolha == '2'){
+                    }else if (inArray(ids, p->partidas.time2ID, j) && escolha == '2'){
+                        nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
                         printf("%-5d %-12s %d %s %d %-15s\n",
-                        bd_partidas[i].ID,
-                        bd_times[bd_partidas[i].time1ID].nome,
-                        bd_partidas[i].gols1,
+                        p->partidas.ID,
+                        nome[0],
+                        p->partidas.gols1,
                         "X",
-                        bd_partidas[i].gols2,
-                        bd_times[bd_partidas[i].time2ID].nome
+                        p->partidas.gols2,
+                        nome[1]
                     );
-                    }else if ((inArray(ids, bd_partidas[i].time1ID, j) || inArray(ids, bd_partidas[i].time2ID, j)) && escolha == '3'){
-                        printf("%-5d %-12s %d %s %d %-15s\n", bd_partidas[i].ID,
-                            bd_times[bd_partidas[i].time1ID].nome,
-                            bd_partidas[i].gols1,
+                    }else if ((inArray(ids, p->partidas.time1ID, j) || inArray(ids, p->partidas.time2ID, j)) && escolha == '3'){
+                        nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
+                        printf("%-5d %-12s %d %s %d %-15s\n", p->partidas.ID,
+                            nome[0],
+                            p->partidas.gols1,
                             "X",
-                            bd_partidas[i].gols2,
-                            bd_times[bd_partidas[i].time2ID].nome
+                            p->partidas.gols2,
+                            nome[1]
                         );
                     }
                     
@@ -107,7 +124,7 @@ void consultar_partidas(const int qtd_partidas, Times *bd_times, Partidas *bd_pa
     }
 }
 
-void consultar_time(Times *bd_times){
+void consultar_time(BDTime *bd_times){
     char *nome_time = malloc(sizeof(char)*40);
     char *outro_time = malloc(sizeof(char)*40);
     bool cabecalho = false;
@@ -119,8 +136,8 @@ void consultar_time(Times *bd_times){
 
     int tamanho_nome = strlen(nome_time);
 
-    for (int i = 0; i < 10; i++){
-        strncpy(outro_time, bd_times[i].nome, tamanho_nome);
+    for (No_T *t = bd_times->first; t != NULL; t = t->next){
+        strncpy(outro_time, t->times.nome, tamanho_nome);
         //torna o search case insensitive
         lowercase(outro_time, nome_time, tamanho_nome);
         if (strncmp(outro_time, nome_time, tamanho_nome) == 0){
@@ -130,15 +147,15 @@ void consultar_time(Times *bd_times){
             }
 
             printf("%-4d %-25s %4d %4d %4d %4d %4d %4d %4d\n",
-                bd_times[i].ID,
-                bd_times[i].nome,
-                bd_times[i].status.wins,
-                bd_times[i].status.draw,
-                bd_times[i].status.lose,
-                bd_times[i].status.w_score,
-                bd_times[i].status.l_score,
-                bd_times[i].status.saldo,
-                bd_times[i].status.pts_ganho);
+                t->times.ID,
+                t->times.nome,
+                t->times.status.wins,
+                t->times.status.draw,
+                t->times.status.lose,
+                t->times.status.w_score,
+                t->times.status.l_score,
+                t->times.status.saldo,
+                t->times.status.pts_ganho);
             
         }
     }
@@ -151,28 +168,28 @@ void consultar_time(Times *bd_times){
     printf("\n\n");
 }
 
-void mostrar_classificação(Times *bd_times, Partidas *bd_partidas)
+void mostrar_classificação(BDTime *bd_times, BDPartida *bd_partidas)
 {
     limpa_tela();
     
     printf("%-4s %-25s %4s %4s %4s %4s %4s %4s %4s\n", "ID", "Time", "V", "E", "D", "GM", "GS", "S", "PG");
-    for (int i = 0; i < 10; i++)
+    for (No_T *t = bd_times->first; t != NULL; t = t->next)
     {   
         printf("%-4d %-25s %4d %4d %4d %4d %4d %4d %4d\n",
-            bd_times[i].ID,
-            bd_times[i].nome,
-            bd_times[i].status.wins,
-            bd_times[i].status.draw,
-            bd_times[i].status.lose,
-            bd_times[i].status.w_score,
-            bd_times[i].status.l_score,
-            bd_times[i].status.saldo,
-            bd_times[i].status.pts_ganho);
+            t->times.ID,
+            t->times.nome,
+            t->times.status.wins,
+            t->times.status.draw,
+            t->times.status.lose,
+            t->times.status.w_score,
+            t->times.status.l_score,
+            t->times.status.saldo,
+            t->times.status.pts_ganho);
     }
     printf("\n\n\n");
 }
 
-void exibir_menu(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
+void exibir_menu(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partidas)
 {
     char escolha;
     while(escolha != 'Q' && escolha != 'q'){

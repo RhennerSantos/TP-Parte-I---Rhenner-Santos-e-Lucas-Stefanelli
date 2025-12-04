@@ -19,18 +19,18 @@ int conta_linhas(char *arq)
         chr = getc(csv);
     }
     fclose(csv); 
-    return count;
+    return count -1;
 }
 
-Times *criar_bdT(char* arq)
+BDTime *criar_bdT(char* arq)
 {
-    //Aloca memória estaticamente para o banco de dados
-    Times t[10];
-    //aloca dinamicamente memória pro ponteiro
-    Times *ptr_time = malloc(10 * sizeof(Times));
-    for (int i = 0; i < 10; i++){
-        ptr_time[i] = t[i]; 
-    }
+
+    //aloca dinamicamente memória para um ponteiro para lista encadeada
+    BDTime *ptr_time = malloc(sizeof(BDTime));
+    ptr_time->first = NULL;
+    
+    //Cria um struct para ser inserido na lista encadeada
+    Times atual; 
     
     //abre arquivo para começar a preencher o banco de dados
     FILE *csv = fopen(arq, "r");
@@ -38,25 +38,29 @@ Times *criar_bdT(char* arq)
     //pula a primeira linha do csv
     char linha[256];
     fgets(linha, sizeof(linha), csv);
- 
-    //preenche o banco de dados
+
+    //altera o struct "atual" e insere ele nos nós 
     for (int i = 0; i < 10; i++){
-    fscanf(csv, "%d, %s", &ptr_time[i].ID, ptr_time[i].nome);
+    fscanf(csv, "%d, %s", &atual.ID, atual.nome);
+
+    No_T *no = malloc(sizeof(No_T));
+    no->times = atual;
+    no->next = ptr_time->first;
+    ptr_time->first = no;
     }
 
     fclose(csv);
     return ptr_time;
 }
 
-Partidas *criar_bdP(const int qtd_partidas, char* arq)
+BDPartida *criar_bdP(const int qtd_partidas, char* arq)
 {
-    //Aloca memória estaticamente para o banco de dados
-    Partidas p[qtd_partidas-1];
-    //Aloca memória dinamicamente pro ponteiro
-    Partidas *ptr_partida = malloc(qtd_partidas * sizeof(Partidas));
-    for (int i = 0; i < qtd_partidas; i++){
-        ptr_partida[i] = p[i]; 
-    }
+    //aloca dinamicamente memória para um ponteiro para lista encadeada
+    BDPartida *ptr_partida = malloc(sizeof(BDPartida));
+    ptr_partida->first = NULL;
+    
+    //Cria um struct para ser inserido na lista encadeada
+    Partidas atual; 
     
     //abre arquivo para começar a preencher o banco de dados
     FILE *csv = fopen(arq, "r");
@@ -67,15 +71,21 @@ Partidas *criar_bdP(const int qtd_partidas, char* arq)
     
     //Preenche o banco de dados
     for (int i = 0; i < qtd_partidas; i++){
-    fscanf(csv, "%d, %d, %d, %d, %d", &ptr_partida[i].ID, &ptr_partida[i].time1ID, &ptr_partida[i].time2ID, 
-    &ptr_partida[i].gols1, &ptr_partida[i].gols2); 
+    fscanf(csv, "%d, %d, %d, %d, %d", &atual.ID, &atual.time1ID, &atual.time2ID, 
+    &atual.gols1, &atual.gols2); 
+    
+    No_P *no = malloc(sizeof(No_P));
+    no->partidas = atual;
+    no->next = ptr_partida->first;
+    ptr_partida->first = no;
     }
 
     fclose(csv);
     return ptr_partida;
 }
 
-void calcula_estatistica(const int qtd_partidas, Times *bd_times, Partidas *bd_partidas)
+//Calcula as pontuações para inserir no TAD_Time
+void calcula_estatistica(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partidas)
 {
     //variáveis acumuladoras
     int win = 0;
@@ -84,17 +94,17 @@ void calcula_estatistica(const int qtd_partidas, Times *bd_times, Partidas *bd_p
     int w_gols = 0;
     int l_gols = 0;
     //começa a contar as vitórias, derrotas e empates
-    for (int i = 0; i < 10; i++)
+    for (No_T *t = bd_times->first; t != NULL; t = t->next)
     {
-        for (int j = 0; j < qtd_partidas-1; j++)
+        for (No_P *p = bd_partidas->first; p != NULL; p = p->next)
         {
-            if(bd_times[i].ID == bd_partidas[j].time1ID)
+            if(t->times.ID == p->partidas.time1ID)
             {
-                if(bd_partidas[j].gols1 > bd_partidas[j].gols2)
+                if(p->partidas.gols1 > p->partidas.gols2)
                 {
                     win++;
                 } 
-                else if (bd_partidas[j].gols1 == bd_partidas[j].gols2)
+                else if (p->partidas.gols1 == p->partidas.gols2)
                 {
                     draw++;
                 }
@@ -102,17 +112,17 @@ void calcula_estatistica(const int qtd_partidas, Times *bd_times, Partidas *bd_p
                 {
                     defeat++;
                 }
-                w_gols += bd_partidas[j].gols1;
-                l_gols += bd_partidas[j].gols2;
+                w_gols += p->partidas.gols1;
+                l_gols += p->partidas.gols2;
                 
             }
-            if(bd_times[i].ID == bd_partidas[j].time2ID)
+            if(t->times.ID == p->partidas.time2ID)
             {
-                if(bd_partidas[j].gols1 < bd_partidas[j].gols2)
+                if(p->partidas.gols1 < p->partidas.gols2)
                 {
                     win++;
                 } 
-                else if (bd_partidas[j].gols1 == bd_partidas[j].gols2)
+                else if (p->partidas.gols1 == p->partidas.gols2)
                 {
                     draw++;
                 }
@@ -120,18 +130,18 @@ void calcula_estatistica(const int qtd_partidas, Times *bd_times, Partidas *bd_p
                 {
                     defeat++;
                 }
-                w_gols += bd_partidas[j].gols2;
-                l_gols += bd_partidas[j].gols1;
+                w_gols += p->partidas.gols2;
+                l_gols += p->partidas.gols1;
             }
         }
         //insere estatisticas no struct status
-        bd_times[i].status.wins = win;
-        bd_times[i].status.lose = defeat;
-        bd_times[i].status.draw = draw;
-        bd_times[i].status.w_score = w_gols;
-        bd_times[i].status.l_score = l_gols;
-        bd_times[i].status.saldo = w_gols - l_gols;
-        bd_times[i].status.pts_ganho = 3*win + draw;
+        t->times.status.wins = win;
+        t->times.status.lose = defeat;
+        t->times.status.draw = draw;
+        t->times.status.w_score = w_gols;
+        t->times.status.l_score = l_gols;
+        t->times.status.saldo = w_gols - l_gols;
+        t->times.status.pts_ganho = 3*win + draw;
         //reinicia as variáveis para calcular pro próximo time
         win = 0;
         draw = 0;
@@ -140,7 +150,3 @@ void calcula_estatistica(const int qtd_partidas, Times *bd_times, Partidas *bd_p
         l_gols = 0;
     }      
 }
-
-
-
-
