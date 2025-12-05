@@ -16,11 +16,16 @@ int main()
     BDTime *bd_times = criar_bdT(arq_times);
     BDPartida *bd_partidas = criar_bdP(linhas_partidas, arq_partidas);
     
-    // //Calcula e armazena dados do TAD times que é contido no BDtimes
+    //Calcula e armazena dados do TAD times que é contido no BDtimes
     calcula_estatistica(linhas_partidas, bd_times, bd_partidas);
     
     //Mostra a tela no terminal
     exibir_menu(linhas_partidas, bd_times, bd_partidas);
+    
+    for (No_P *p = bd_partidas->first; p != NULL; p = p->next)
+    {
+        printf("%d\n", p->partidas.ID);
+    }
     
     //Libera os ponteiros do banco de dados
     free(bd_times);
