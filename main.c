@@ -22,11 +22,6 @@ int main()
     //Mostra a tela no terminal
     exibir_menu(linhas_partidas, bd_times, bd_partidas);
     
-    for (No_P *p = bd_partidas->first; p != NULL; p = p->next)
-    {
-        printf("%d\n", p->partidas.ID);
-    }
-    
     //Libera os ponteiros do banco de dados
     free(bd_times);
     free(bd_partidas);
