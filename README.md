@@ -95,7 +95,7 @@ typedef struct{
 ```
 
 
-Há 3 structs, mas o apenas dois banco de dados. É interessante observar que o struct Status faz parte do struct Times, mas estes estão separados para facilitar a organização dos dados.
+Há 3 structs, mas apenas dois banco de dados. É interessante observar que o struct Status faz parte do struct Times, mas estes estão separados para facilitar a organização dos dados.
  
 ### 3 Funções do main()
 
