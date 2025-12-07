@@ -4,7 +4,6 @@
 #include "partida.c"
 #include "time.c"
 
-
 //Cria a lista encadeada e nó para o BDTimes
 typedef struct No_T{
     Times times;
@@ -37,5 +36,12 @@ void *inserir_dados();
 
 //Calcula e insere dado no banco de dados
 void calcula_estatistica(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partidas);
+
+//Ordenação
+void ordena_times(BDTime *bd_times);
+
+//Funções p/ liberar memória
+void liberar_bd_times(BDTime *bd_times);
+void liberar_bd_partidas(BDPartida *bd_partidas);
 
 #endif

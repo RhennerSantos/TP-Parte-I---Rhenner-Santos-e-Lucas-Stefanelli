@@ -1,5 +1,4 @@
 
-
 //BD_partida
 typedef struct{
     int ID;

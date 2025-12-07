@@ -35,6 +35,11 @@ void lowercase(char *outro_time, char *nome_time, int tamanho_nome)
 char** busca_time(int id1, int id2, BDTime *bd_times)
 {
     char **nome = malloc(2 * sizeof(char*));
+    if (nome == NULL) return NULL;
+    
+    nome[0] = NULL;
+    nome[1] = NULL;
+    
     for (No_T *t = bd_times->first; t != NULL; t = t->next){
         if (t->times.ID == id1){
             nome[0] = t->times.nome;
@@ -53,17 +58,16 @@ void remover_partida(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_par
     int ID;
     char conf[40];
     
-    //chama o consulta_partidas para o cliente observar a partida que ele deseja atualizar. Caso o nome do time não seja encontrado, ele volta para o menu.
     if(consultar_partidas(qtd_partidas, bd_times, bd_partidas)) return;
-    //interface
+    
     printf("Digite o ID da partida que você deseja remover: ");
-    scanf(" %d", &ID);
+    scanf("%d", &ID);
     printf("\n");
-    //iteração de nós até achar o id que o usuário digitou
-    printf("\nConfirmar inserção de valores [S/N] \n");
-    scanf(" %s", &conf);    
+    
+    printf("\nTem certeza que deseja remover a partida? [S/N] \n");
+    scanf("%s", conf);    
     conf[0] = tolower(conf[0]);
-    //deleta o nó 
+    
     if (conf[0] == 's')
     {
         while(p != NULL)
@@ -78,124 +82,139 @@ void remover_partida(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_par
                 {
                     prev->next = p->next;
                 }
-                free (p);
+                free(p);
+                printf("Partida removida com sucesso!\n");
+                calcula_estatistica(qtd_partidas, bd_times, bd_partidas);
+                return;
             }
-            else
-            {
-                prev = p;
-                p = p->next;
-            }        
+            prev = p;
+            p = p->next;
         }
+        printf("Partida com ID %d não encontrada.\n", ID);
     }    
     else if(conf[0] == 'n')
     {
-        printf("A inserção dos valores foi cancelada\n");
+        printf("A remoção foi cancelada\n");
         return;  
     }
-    //tem que atualizar o número de nós depois
-}  
+}
+
 void inserir_partida(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partidas)
 {
     int time1, time2, placar1, placar2;
     char conf[40];
-    //interface
-    printf("Para inserir o novo registro digite os seguintes valores.");
+    
+    printf("Para inserir o novo registro digite os seguintes valores.\n");
     printf("ID do time1: ");
     scanf("%d", &time1);
-    printf("\n");
     printf("ID do time2: ");
     scanf("%d", &time2);
-    printf("\n");  
-    printf("ID do placar1: ");
+    printf("Placar do time1: ");
     scanf("%d", &placar1);
-    printf("\n");      
-    printf("ID do placar2: ");
+    printf("Placar do time2: ");
     scanf("%d", &placar2);
-    printf("\n"); 
         
     printf("\nConfirmar inserção de valores [S/N] \n");
-    scanf(" %s", &conf);    
+    scanf("%s", conf);    
     conf[0] = tolower(conf[0]);
-            if (conf[0] == 's')
-            {
-                No_P *p = malloc(sizeof(No_P));
-                
-                p->partidas.ID = 666; //o ID vai ser decidido no select ent botei um número qualquer
-                p->partidas.time1ID = time1;
-                p->partidas.time2ID = time2;
-                p->partidas.gols1 = placar1; 
-                p->partidas.gols2 = placar2; 
-                
-                p->next = bd_partidas->first;                                
-                bd_partidas->first = p;     
-                return;
-            }else if(conf[0] == 'n'){
-                printf("A inserção dos valores foi cancelada\n");
+    
+    if (conf[0] == 's')
+    {
+        No_P *p = malloc(sizeof(No_P));
+        if (p == NULL) {
+            printf("Erro ao alocar memória.\n");
+            return;
+        }
+        
+        int max_id = 0;
+        for (No_P *temp = bd_partidas->first; temp != NULL; temp = temp->next) {
+            if (temp->partidas.ID > max_id) {
+                max_id = temp->partidas.ID;
             }
+        }
+        
+        p->partidas.ID = max_id + 1;
+        p->partidas.time1ID = time1;
+        p->partidas.time2ID = time2;
+        p->partidas.gols1 = placar1; 
+        p->partidas.gols2 = placar2; 
+        
+        p->next = bd_partidas->first;                                
+        bd_partidas->first = p;
+        calcula_estatistica(qtd_partidas + 1, bd_times, bd_partidas);
+        printf("Partida inserida com sucesso! ID: %d\n", p->partidas.ID);
+        return;
+    }
+    else if(conf[0] == 'n')
+    {
+        printf("A inserção dos valores foi cancelada\n");
+    }
 }
 
 void atualizar_partida(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partidas)
 {
     int id, placar1, placar2;
     char conf[40];
-    //chama o consulta_partidas para o cliente observar a partida que ele deseja atualizar. Caso o nome do time não seja encontrado, ele volta para o menu.
+    
     if(consultar_partidas(qtd_partidas, bd_times, bd_partidas)) return;
-    //o nome é um ponteiro de ponteiro, pois ele vai guardar 2 nomes de times
-    char **nome = malloc(2 * sizeof(char));
     
-    //interface
-    printf("Digite o ID da partida que você deseja alterar:");
-    scanf(" %d", &id);
+    printf("Digite o ID da partida que você deseja alterar: ");
+    scanf("%d", &id);
     printf("\n");
-    printf("Digite um novo valor para o placar 1 e placar 2 respectivamente. Para manter o placar digite '-'\n");
-    scanf(" %d", &placar1);
-    scanf(" %d", &placar2);
+    printf("Digite um novo valor para o placar 1 e placar 2 respectivamente:\n");
+    printf("Placar 1: ");
+    scanf("%d", &placar1);
+    printf("Placar 2: ");
+    scanf("%d", &placar2);
     
-    //iteração de nós até achar o id que o usuário digitou
     for (No_P *p = bd_partidas->first; p != NULL; p = p->next)
     {
         if (p->partidas.ID == id){
-            //função pegas os nomes dos 2 times pelo id deles
-            nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
+            char **nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
+            
+            if (nome == NULL) {
+                printf("Erro ao buscar nomes dos times.\n");
+                return;
+            }
+            
             printf("\n[Novo placar] \n");
-            printf("%-5s %-18s %-25s\n",
-            "ID",
-            "Time 1",
-            "Time 2");
-            printf(" \n");
+            printf("%-5s %-18s %-25s\n", "ID", "Time 1", "Time 2");
             printf("%-5d %-12s %d %s %d %-15s\n",
-                        p->partidas.ID,
-                        nome[0],
-                        placar1,
-                        "X",
-                        placar2,
-                        nome[1]
-                    );
+                p->partidas.ID,
+                nome[0] ? nome[0] : "N/A",
+                placar1,
+                "X",
+                placar2,
+                nome[1] ? nome[1] : "N/A"
+            );
+            
             printf("\nConfirmar atualização de valores [S/N] \n");
-            scanf(" %s", &conf);
-            //Se o usuário digitar S ou s, ele vai atualizar os scores
+            scanf("%s", conf);
             conf[0] = tolower(conf[0]);
+            
+            free(nome);
+            
             if (conf[0] == 's'){
-                p->partidas.gols2 = placar2;
                 p->partidas.gols1 = placar1;
+                p->partidas.gols2 = placar2;
+                calcula_estatistica(qtd_partidas, bd_times, bd_partidas);
                 printf("Atualização feita com sucesso\n");
                 return;
-                }else if(conf[0] == 'n'){
-                    printf("Atualização cancelada\n");
-                    return;
-                }
+            }
+            else if(conf[0] == 'n'){
+                printf("Atualização cancelada\n");
+                return;
+            }
         }
     }
-    
-    
+    printf("Partida com ID %d não encontrada.\n", id);
 }
 
 bool consultar_partidas(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partidas){
     char escolha;
-    int i, j = 0, tamanho_nome;
-    char *nome_time = malloc(sizeof(char)*40);
-    char *outro_time = malloc(sizeof(char)*40);
-    char **nome = malloc(2 * sizeof(char*));
+    int j = 0, tamanho_nome;
+    char nome_time[100];
+    char outro_time[100];
     int ids[10];
 
     limpa_tela();
@@ -204,7 +223,6 @@ bool consultar_partidas(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_
     scanf(" %c", &escolha);
 
     if (escolha != '4'){
-
         printf("Digite o nome ou prefixo do time: ");
         scanf("%s", nome_time);
         printf("\n");
@@ -212,68 +230,63 @@ bool consultar_partidas(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_
         tamanho_nome = strlen(nome_time);
 
         for (No_T *t = bd_times->first; t != NULL; t = t->next){
-
             strncpy(outro_time, t->times.nome, tamanho_nome);
-            //torna o search case insensitive
+            outro_time[tamanho_nome] = '\0';
+            
             lowercase(outro_time, nome_time, tamanho_nome);
+            
             if (strncmp(outro_time, nome_time, tamanho_nome) == 0){
                 ids[j] = t->times.ID;
                 j++;
+                if (j >= 10) break;
             }
         }
+        
         if (j == 0){
             printf("Time não encontrado.\n");
             return true;
-        }else{
-        printf("%-5s %-18s %-25s\n",
-        "ID",
-        "Time 1",
-        "Time 2");
-            for (No_P *p = bd_partidas->first; p != NULL; p = p->next){
-                if (inArray(ids, p->partidas.time1ID, j) && escolha == '1'){
-                    nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
+        }
+        
+        printf("%-5s %-18s %-25s\n", "ID", "Time 1", "Time 2");
+        
+        for (No_P *p = bd_partidas->first; p != NULL; p = p->next){
+            bool exibir = false;
+            
+            if (escolha == '1' && inArray(ids, p->partidas.time1ID, j)) {
+                exibir = true;
+            }
+            else if (escolha == '2' && inArray(ids, p->partidas.time2ID, j)) {
+                exibir = true;
+            }
+            else if (escolha == '3' && (inArray(ids, p->partidas.time1ID, j) || inArray(ids, p->partidas.time2ID, j))) {
+                exibir = true;
+            }
+            
+            if (exibir) {
+                char **nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
+                if (nome != NULL) {
                     printf("%-5d %-12s %d %s %d %-15s\n",
                         p->partidas.ID,
-                        nome[0],
+                        nome[0] ? nome[0] : "N/A",
                         p->partidas.gols1,
                         "X",
                         p->partidas.gols2,
-                        nome[1]
+                        nome[1] ? nome[1] : "N/A"
                     );
-                    }else if (inArray(ids, p->partidas.time2ID, j) && escolha == '2'){
-                        nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
-                        printf("%-5d %-12s %d %s %d %-15s\n",
-                        p->partidas.ID,
-                        nome[0],
-                        p->partidas.gols1,
-                        "X",
-                        p->partidas.gols2,
-                        nome[1]
-                    );
-                    }else if ((inArray(ids, p->partidas.time1ID, j) || inArray(ids, p->partidas.time2ID, j)) && escolha == '3'){
-                        nome = busca_time(p->partidas.time1ID, p->partidas.time2ID, bd_times);
-                        printf("%-5d %-12s %d %s %d %-15s\n", p->partidas.ID,
-                            nome[0],
-                            p->partidas.gols1,
-                            "X",
-                            p->partidas.gols2,
-                            nome[1]
-                        );
-                    }
-                    
+                    free(nome);
                 }
+            }
+        }
         
-    }
-        free(nome_time);
-        free(outro_time);
         printf("\n");
         return false;
     }
+    return false;
 }
 
 void consultar_time(BDTime *bd_times){
-    char *nome_time = malloc(sizeof(char)*40);
-    char *outro_time = malloc(sizeof(char)*40);
+    char nome_time[100];
+    char outro_time[100];
     bool cabecalho = false;
 
     limpa_tela();
@@ -285,8 +298,10 @@ void consultar_time(BDTime *bd_times){
 
     for (No_T *t = bd_times->first; t != NULL; t = t->next){
         strncpy(outro_time, t->times.nome, tamanho_nome);
-        //torna o search case insensitive
+        outro_time[tamanho_nome] = '\0';
+        
         lowercase(outro_time, nome_time, tamanho_nome);
+        
         if (strncmp(outro_time, nome_time, tamanho_nome) == 0){
             if (!cabecalho){
                 printf("%-4s %-25s %4s %4s %4s %4s %4s %4s %4s\n", "ID", "Time", "V", "E", "D", "GM", "GS", "S", "PG");
@@ -303,22 +318,19 @@ void consultar_time(BDTime *bd_times){
                 t->times.status.l_score,
                 t->times.status.saldo,
                 t->times.status.pts_ganho);
-            
         }
     }
 
     if (!cabecalho){
         printf("Time não encontrado.");
     }
-    free(nome_time);
-    free(outro_time);
     printf("\n\n");
 }
 
 void mostrar_classificação(BDTime *bd_times, BDPartida *bd_partidas)
 {
     limpa_tela();
-    
+    ordena_times(bd_times);
     printf("%-4s %-25s %4s %4s %4s %4s %4s %4s %4s\n", "ID", "Time", "V", "E", "D", "GM", "GS", "S", "PG");
     for (No_T *t = bd_times->first; t != NULL; t = t->next)
     {   
@@ -338,7 +350,7 @@ void mostrar_classificação(BDTime *bd_times, BDPartida *bd_partidas)
 
 void exibir_menu(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partidas)
 {
-    char escolha;
+    char escolha = '0';
     while(escolha != 'Q' && escolha != 'q'){
         printf("Bem-vindo ao sistema de gerenciamento de partidas!\n");
         printf("Digite um numero para prosseguir: \n");
@@ -353,85 +365,24 @@ void exibir_menu(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partida
     
         switch(escolha){
             case '1': 
-                if(qtd_partidas != 1)
-                {
-                    consultar_time(bd_times);
-                    break;    
-                }
-                else
-                {
-                    limpa_tela();
-                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
-                    break;
-                }
+                consultar_time(bd_times);
+                break;
             case '2':
-                if(qtd_partidas != 1)
-                {
-                    consultar_partidas(qtd_partidas, bd_times, bd_partidas);
-                    break;    
-                }
-                else
-                {
-                    limpa_tela();
-                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
-                    break;
-                }
+                consultar_partidas(qtd_partidas, bd_times, bd_partidas);
                 break;
             case '3':
-                if(qtd_partidas != 1)
-                {
-                    atualizar_partida(qtd_partidas, bd_times, bd_partidas);
-                    break;    
-                }
-                else
-                {
-                    limpa_tela();
-                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
-                    break;
-                }
+                atualizar_partida(qtd_partidas, bd_times, bd_partidas);
                 break;
             case '4':
-                if(qtd_partidas != 1)
-                {
-                    remover_partida(qtd_partidas, bd_times, bd_partidas);
-                    break;    
-                }
-                else
-                {
-                    limpa_tela();
-                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
-                    break;
-                }
+                remover_partida(qtd_partidas, bd_times, bd_partidas);
                 break;
             case '5':
-                if(qtd_partidas != 1)
-                {
-                    inserir_partida(qtd_partidas, bd_times, bd_partidas);
-                    break;    
-                }
-                else
-                {
-                    limpa_tela();
-                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
-                    break;
-                }
+                inserir_partida(qtd_partidas, bd_times, bd_partidas);
                 break;
             case '6':
-                if(qtd_partidas != 1)
-                {
-                    mostrar_classificação(bd_times, bd_partidas);
-                    break;    
-                }
-                else
-                {
-                    limpa_tela();
-                    printf("Infelizmente, os times não constam nenhum score no sistema\n");
-                    break;
-                }
+                mostrar_classificação(bd_times, bd_partidas);
                 break;
             case 'Q':
-                printf("Você escolheu sair do sistema\n");
-                break;
             case 'q':
                 printf("Você escolheu sair do sistema\n");
                 break;
@@ -440,6 +391,3 @@ void exibir_menu(const int qtd_partidas, BDTime *bd_times, BDPartida *bd_partida
         }
     }
 }
-
-
-

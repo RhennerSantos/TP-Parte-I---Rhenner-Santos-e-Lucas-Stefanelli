@@ -18,13 +18,14 @@ int main()
     
     //Calcula e armazena dados do TAD times que é contido no BDtimes
     calcula_estatistica(linhas_partidas, bd_times, bd_partidas);
-    
+
     //Mostra a tela no terminal
     exibir_menu(linhas_partidas, bd_times, bd_partidas);
     
     //Libera os ponteiros do banco de dados
-    free(bd_times);
-    free(bd_partidas);
+    liberar_bd_times(bd_times);
+    liberar_bd_partidas(bd_partidas);
+    
     return 0;
 }
 

@@ -3,6 +3,42 @@
 #include <stdlib.h>
 #include <string.h>
 
+void liberar_bd_times(BDTime *bd_times)
+{
+    if (bd_times == NULL)
+        return;
+    
+    No_T *atual = bd_times->first;
+    No_T *proximo;
+    
+    while (atual != NULL)
+    {
+        proximo = atual->next;
+        free(atual);
+        atual = proximo;
+    }
+    
+    free(bd_times);
+}
+
+void liberar_bd_partidas(BDPartida *bd_partidas)
+{
+    if (bd_partidas == NULL)
+        return;
+    
+    No_P *atual = bd_partidas->first;
+    No_P *proximo;
+    
+    while (atual != NULL)
+    {
+        proximo = atual->next;
+        free(atual);
+        atual = proximo;
+    }
+    
+    free(bd_partidas);
+}
+
 int conta_linhas(char *arq)
 {
     FILE *csv = fopen(arq, "r");
@@ -10,16 +46,129 @@ int conta_linhas(char *arq)
     char chr = 'a';
     
     //conta as linhas verificando o final \n delas
-    while (chr != EOF)
+    while ((chr = getc(csv)) != EOF)
     {
         if (chr == '\n')
         {
-            count = count + 1;
+            count++;
         }
-        chr = getc(csv);
     }
+
     fclose(csv); 
     return count -1;
+}
+
+// Função de comparação: Retorna 1 se time1 > time2, -1 se time1 < time2, 0 se iguais
+int compara_times(Times *t1, Times *t2)
+{
+    // Pontos ganhos
+    if (t1->status.pts_ganho > t2->status.pts_ganho)
+        return 1;
+    if (t1->status.pts_ganho < t2->status.pts_ganho)
+        return -1;
+    
+    // Saldo de gols
+    if (t1->status.saldo > t2->status.saldo)
+        return 1;
+    if (t1->status.saldo < t2->status.saldo)
+        return -1;
+    
+    // Gols marcados
+    if (t1->status.w_score > t2->status.w_score)
+        return 1;
+    if (t1->status.w_score < t2->status.w_score)
+        return -1;
+    
+    // Vitórias
+    if (t1->status.wins > t2->status.wins)
+        return 1;
+    if (t1->status.wins < t2->status.wins)
+        return -1;
+    
+    // Times empatados em todos os critérios
+    return 0;
+}
+
+// Função auxiliar para encontrar o último node
+No_T* get_ultimo(No_T *head)
+{
+    while (head != NULL && head->next != NULL)
+        head = head->next;
+    return head;
+}
+
+// Função de partição do Quicksort
+No_T* particiona(No_T *head, No_T *end, No_T **newHead, No_T **newEnd)
+{
+    No_T *pivot = end;
+    No_T *prev = NULL, *cur = head, *tail = pivot;
+    
+    while (cur != pivot)
+    {
+        if (compara_times(&cur->times, &pivot->times) > 0)
+        {
+            if (*newHead == NULL)
+                *newHead = cur;
+            
+            prev = cur;
+            cur = cur->next;
+        }
+        else
+        {
+            if (prev)
+                prev->next = cur->next;
+            
+            No_T *tmp = cur->next;
+            cur->next = NULL;
+            tail->next = cur;
+            tail = cur;
+            cur = tmp;
+        }
+    }
+    
+    if (*newHead == NULL)
+        *newHead = pivot;
+    
+    *newEnd = tail;
+    
+    return pivot;
+}
+
+// Quicksort
+No_T* quicksort_recursivo(No_T *head, No_T *end)
+{
+    if (!head || head == end)
+        return head;
+    
+    No_T *newHead = NULL, *newEnd = NULL;
+    
+    No_T *pivot = particiona(head, end, &newHead, &newEnd);
+    
+    if (newHead != pivot)
+    {
+        No_T *tmp = newHead;
+        while (tmp->next != pivot)
+            tmp = tmp->next;
+        tmp->next = NULL;
+        
+        newHead = quicksort_recursivo(newHead, tmp);
+        
+        tmp = get_ultimo(newHead);
+        tmp->next = pivot;
+    }
+    
+    pivot->next = quicksort_recursivo(pivot->next, newEnd);
+    
+    return newHead;
+}
+
+// Ordenação
+void ordena_times(BDTime *bd_times)
+{
+    if (bd_times == NULL || bd_times->first == NULL)
+        return;
+    
+    bd_times->first = quicksort_recursivo(bd_times->first, get_ultimo(bd_times->first));
 }
 
 BDTime *criar_bdT(char* arq)
@@ -41,6 +190,7 @@ BDTime *criar_bdT(char* arq)
 
     //altera o struct "atual" e insere ele nos nós 
     for (int i = 0; i < 10; i++){
+
     fscanf(csv, "%d, %s", &atual.ID, atual.nome);
 
     No_T *no = malloc(sizeof(No_T));
