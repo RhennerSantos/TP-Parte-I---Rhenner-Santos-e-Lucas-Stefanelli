@@ -42,7 +42,6 @@ Q - Sair.
  |Makefile            |executa e compila os arquivos automaticamente      |
  |main.c              |arquivo principal do programa                      |
  |bd.c + bd.h         |possui as listas encadeadas do BD times/partidas   |
- |                    |e funções de organização do banco de dados         |
  |time.c + partidas.c |tem o struct do BDTimes e BDpartidas               |                                                   
  |menu.c + menu.h     |possui todas as funções do menu                    |
  |partidas.csv        |conjunto de dados das partidas                     |
