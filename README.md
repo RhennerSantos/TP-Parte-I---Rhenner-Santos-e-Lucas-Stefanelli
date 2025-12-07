@@ -112,11 +112,12 @@ liberar_bd_partidas():        Dá free nos nodes e no ponteiro para o BD_Partida
 
 ##  Decisões de implementação
 
+- bool consultar_partidas(): a função de consulta retonar um valor verdadeiro e falso, útil para caso o nome seja pesquisado errado e a interface não possa prosseguir para remoção ou atualização de dados.
 - Conta_linhas(): Função para contar as quantidade variável de linhas do partidas.csv. Útil para quando for necessário iterar o BD_Partidas.
 - Calcula_estatistica(): Essa função é utilizado antes do menu iniciar, mas também é chamada quando os dados são alterados.
 - lowercase(): Essa é uma função que torna possível fazer uma pesquisa case insensitive.
 - inArray(): Checa se os IDs escolhidos são os do time desejado, utlizado no consultar_partidas.
-- quicksort_recursivo(): Para ordenar os times, foi utilizado um quicksort e alguns outras funções auxiliares como a get_ultimo()
+- quicksort_recursivo(): Para ordenar os times, foi utilizado um quicksort e alguns outras funções auxiliares como a get_ultimo() que pega o último nó da lista.
 - strncmp(): Faz o search tanto pelo nome completo quanto pelo prefixo;
 
 
