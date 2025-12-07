@@ -116,7 +116,7 @@ liberar_bd_partidas():        Dá free nos nodes e no ponteiro para o BD_Partida
 - Calcula_estatistica(): Essa função é utilizado antes do menu iniciar, mas também é chamada quando os dados são alterados.
 - lowercase(): Essa é uma função que torna possível fazer uma pesquisa case insensitive.
 - inArray(): Checa se os IDs escolhidos são os do time desejado, utlizado no consultar_partidas.
-- quicksort_recursivo(): Para ordenar os times, foi utilizado um quicksort e alguns outras funções auxiliares como a get_ultimo() que pega o último nó da lista.
+- quicksort_recursivo(): Para ordenar os times, foi utilizado um quicksort e alguns outras funções auxiliares como a get_ultimo() que pega o último nó da lista. Inclusive, a ordenação é feita primeiro pela quantidade de pontos ganhos e tem critérios de desempate como saldo de gols, gols marcados e vitórias.
 - strncmp(): Faz o search tanto pelo nome completo quanto pelo prefixo;
 
 
